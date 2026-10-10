@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
     int dir_count = 0;
     char *dirs[100];
 
-    /* getopt se -l flag parse karo */
     while ((opt = getopt(argc, argv, "l")) != -1)
     {
         if (opt == 'l')
@@ -75,7 +74,6 @@ void do_ls(const char *dir, int long_format)
 
         if (long_format)
         {
-            /* Full path banao */
             char fullpath[1024];
             snprintf(fullpath, sizeof(fullpath), "%s/%s", dir, entry->d_name);
             list_long(dir, fullpath);
@@ -101,33 +99,25 @@ void list_long(const char *dir, const char *fullpath)
         return;
     }
 
-    /* 1. Permissions */
     char perm[11];
     format_permissions(st.st_mode, perm);
 
-    /* 2. Link count */
     nlink_t links = st.st_nlink;
 
-    /* 3. Owner name */
     struct passwd *pw = getpwuid(st.st_uid);
     char *owner = pw ? pw->pw_name : "unknown";
 
-    /* 4. Group name */
     struct group *gr = getgrgid(st.st_gid);
     char *group = gr ? gr->gr_name : "unknown";
 
-    /* 5. Size */
     off_t size = st.st_size;
 
-    /* 6. Time */
     char timebuf[64];
     strftime(timebuf, sizeof(timebuf), "%b %d %H:%M", localtime(&st.st_mtime));
 
-    /* 7. Filename (path se nikaalo) */
     const char *filename = strrchr(fullpath, '/');
     filename = filename ? filename + 1 : fullpath;
 
-    /* Print: permissions links owner group size time filename */
     printf("%s %3ld %-8s %-8s %8ld %s %s\n",
            perm, (long)links, owner, group, (long)size, timebuf, filename);
 }

@@ -24,12 +24,10 @@ void list_long(const char *dir, const char *filename);
 void format_permissions(mode_t mode, char *str);
 int compare_strings(const void *a, const void *b);
 
-/* Column display function */
 void display_columns(char **files, int count)
 {
     if (count == 0) return;
 
-    /* 1. Terminal width lo */
     struct winsize w;
     int term_width = 80;  /* default */
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0)
@@ -37,7 +35,6 @@ void display_columns(char **files, int count)
         term_width = w.ws_col;
     }
 
-    /* 2. Longest filename dhoondo */
     int max_len = 0;
     for (int i = 0; i < count; i++)
     {
@@ -45,15 +42,12 @@ void display_columns(char **files, int count)
         if (len > max_len) max_len = len;
     }
 
-    /* 3. Columns calculate karo */
     int col_width = max_len + SPACING;
     int num_cols = term_width / col_width;
     if (num_cols < 1) num_cols = 1;
 
-    /* 4. Rows calculate karo */
     int num_rows = (count + num_cols - 1) / num_cols;
 
-    /* 5. Down then across print karo */
     for (int row = 0; row < num_rows; row++)
     {
         for (int col = 0; col < num_cols; col++)
@@ -113,7 +107,6 @@ void do_ls(const char *dir, int long_format)
         return;
     }
 
-    /* 1. Saare filenames array mein collect karo */
     char *files[MAX_FILES];
     int count = 0;
 
@@ -136,10 +129,8 @@ void do_ls(const char *dir, int long_format)
 
     if (count == 0) return;
 
-    /* 2. Sort karo (Feature 5 mein aayega — filhaal simple rakh rahe hain) */
     qsort(files, count, sizeof(char *), compare_strings);
 
-    /* 3. Display karo */
     if (long_format)
     {
         for (int i = 0; i < count; i++)
@@ -210,7 +201,7 @@ void format_permissions(mode_t mode, char *str)
     str[10] = '\0';
 }
 
-/* Simple string compare — Feature 5 mein qsort ke saath use hoga */
+
 int compare_strings(const void *a, const void *b)
 {
     return strcmp(*(const char **)a, *(const char **)b);
