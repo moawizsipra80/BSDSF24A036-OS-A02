@@ -6,8 +6,8 @@ BIN_DIR = bin
 OBJ_DIR = obj
 
 TARGET = $(BIN_DIR)/ls
-SRC = $(SRC_DIR)/lsv1.0.0.c
-OBJ = $(OBJ_DIR)/lsv1.0.0.o
+SRC = $(SRC_DIR)/lsv1.1.0.c
+OBJ = $(OBJ_DIR)/lsv1.1.0.o
 
 all: $(TARGET)
 
